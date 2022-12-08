@@ -5,6 +5,10 @@ import static java.lang.Math.*;
 import java.util.Arrays;
 
 public class Practica1 {
+    /**
+     *
+     */
+
     public static void main(String[] args) {
 
         // creo un caso conocido para desarrollar sobre él
@@ -15,37 +19,63 @@ public class Practica1 {
         byte[] codigoHamming = calcularCodigoHamming(mensaje);
 
         // hacemos cambios a mano para ver que el reciever los detecta bien
-        final int POSICION_MODIFICADA_1 = 5;
-        final int POSICION_MODIFICADA_2 = 6;
+        final int POSICION_MODIFICADA_1 = 8;
+        final int POSICION_MODIFICADA_2 = 8;
 
         final byte[] ceroModificaciones = codigoHamming.clone();
-        
+
         final byte[] unaModificacion = codigoHamming.clone();
-        unaModificacion[POSICION_MODIFICADA_1] = (byte)(1 - unaModificacion[POSICION_MODIFICADA_1]);
+        unaModificacion[POSICION_MODIFICADA_1] = (byte) (1 - unaModificacion[POSICION_MODIFICADA_1]);
 
         final byte[] dosModificaciones = codigoHamming.clone();
-        dosModificaciones[POSICION_MODIFICADA_1] = (byte)(1 - dosModificaciones[POSICION_MODIFICADA_1]);
-        dosModificaciones[POSICION_MODIFICADA_2] = (byte)(1 - dosModificaciones[POSICION_MODIFICADA_2]);
+        dosModificaciones[POSICION_MODIFICADA_1] = (byte) (1 - dosModificaciones[POSICION_MODIFICADA_1]);
+        dosModificaciones[POSICION_MODIFICADA_2] = (byte) (1 - dosModificaciones[POSICION_MODIFICADA_2]);
 
-        final byte[] mensajeRecibido = ceroModificaciones;
+        final byte[] mensajeRecibido = dosModificaciones;
 
+        concluirSiHayErrores(mensajeRecibido, recalcularMensaje(mensajeRecibido));
+
+    } // main
+
+    private static byte[] recalcularMensaje(final byte[] mensajeRecibido) {
         // hacemos el reciever
         final byte[] mensajeDeberiaSer = mensajeRecibido.clone();
         // recalculamos bits de paridad
-        mensajeDeberiaSer[0] = calcularBitParidad(mensajeDeberiaSer,0);
-        for(int i = 0; pow(2,i) < mensajeDeberiaSer.length; i++){
-            mensajeDeberiaSer[(int)pow(2,i)] = calcularBitParidad(mensajeDeberiaSer, (int)pow(2,i));
+        mensajeDeberiaSer[0] = calcularBitParidad(mensajeDeberiaSer, 0);
+        for (int i = 0; pow(2, i) < mensajeDeberiaSer.length; i++) {
+            mensajeDeberiaSer[(int) pow(2, i)] = calcularBitParidad(mensajeDeberiaSer, (int) pow(2, i));
         }
+        return mensajeDeberiaSer;
+    }
 
+    private static void concluirSiHayErrores(final byte[] mensajeRecibido, final byte[] mensajeDeberiaSer) {
         // detectamos si hay algún error
-        boolean hayError = Arrays.equals(mensajeDeberiaSer, mensajeRecibido);
-        
+        boolean hayError = !Arrays.equals(mensajeDeberiaSer, mensajeRecibido);
 
+        final byte CERO = 0;
+        // concluimos si hay 0, 1 o 2 errores
+        if (!hayError) {
+            System.out.println("Mensaje recibido sin errores.");
+        } else {
+            // vemos si hay 1 error
+            if (mensajeDeberiaSer[CERO] != mensajeRecibido[CERO]) {
+                System.out.println("Mensaje recibido con un error en: " + detectarError(mensajeRecibido));
+            } else {
+                System.out.println("Mensaje recibido con 2 errores.");
+            }
+        }
+    }
 
-
-
-
-    } // main
+    private static int detectarError(final byte[] mensajeRecibido) {
+        // detectar el error
+        int posicionError = 0;
+        for (int i = 0; i < mensajeRecibido.length; i++) {
+            if (mensajeRecibido[i] != 0) {
+                posicionError = (posicionError ^ i);
+            }
+        }
+        return posicionError;
+    }
 
     private static byte[] calcularCodigoHamming(final byte[] mensaje) {
 
@@ -70,7 +100,7 @@ public class Practica1 {
                 counter += codigoHamming[i];
             }
         }
-        return (byte)(counter % 2);
+        return (byte) (counter % 2);
     }
 
     public static int calculcarNumeroBitsParidad(final byte[] mensaje) {
