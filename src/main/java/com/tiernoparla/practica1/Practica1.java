@@ -12,39 +12,39 @@ public class Practica1 {
         final byte[] codigoHamming_test = { 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0 };
 
         // sender
-        // calcular num bit paridad
-        int numeroBitsParidad = calculcarNumeroBitsParidad(mensaje);
-
-        // crear array (vacío) con codigo de hamming
-        byte[] codigoHamming = new byte[numeroBitsParidad + mensaje.length + 1];
-
-        // rellenamos las posiciones del array que no no son especiales
-        int indiceMensaje = 0;
-        for (int i = 3; i < codigoHamming.length; i++) {
-            if (!esPotenciaDe2(i)) {
-                codigoHamming[i] = mensaje[indiceMensaje];
-                indiceMensaje++;
-            }
-        }
-
-        // calculamos los bits de paridad
-        for (int i = codigoHamming.length - 1; i >= 0; i--) {
-            if (esPotenciaDe2(i) || i == 0) {
-                int counter = 0;
-                for (int j = codigoHamming.length - 1; j > i; j--) {
-                    if ((i & j) == i) {
-                        counter += codigoHamming[j];
-                    }
-                }
-                codigoHamming[i] = (byte) (counter % 2);
-            }
-        }
+        byte[] codigoHamming = calcularCodigoHamming(mensaje);
 
         System.out.println(Arrays.toString(codigoHamming));
         System.out.println(Arrays.toString(codigoHamming_test));
-        System.out.println(Arrays.equals(codigoHamming,codigoHamming_test));
+        System.out.println(Arrays.equals(codigoHamming, codigoHamming_test));
 
     } // main
+
+    private static byte[] calcularCodigoHamming(final byte[] mensaje) {
+
+        byte[] codigoHamming = new byte[calculcarNumeroBitsParidad(mensaje) + mensaje.length + 1];
+
+        int indiceMensaje = mensaje.length - 1;
+        for (int i = codigoHamming.length - 1; i >= 0; i--) {
+            if (esPotenciaDe2(i) || i == 0) {
+                codigoHamming[i] = (byte) calcularBitParidad(codigoHamming, i);
+            } else {
+                codigoHamming[i] = mensaje[indiceMensaje];
+                indiceMensaje--;
+            }
+        }
+        return codigoHamming;
+    }
+
+    private static int calcularBitParidad(byte[] codigoHamming, int posicion) {
+        int counter = 0;
+        for (int i = codigoHamming.length - 1; i > posicion; i--) {
+            if ((posicion & i) == posicion) {
+                counter += codigoHamming[i];
+            }
+        }
+        return (counter % 2);
+    }
 
     public static int calculcarNumeroBitsParidad(final byte[] mensaje) {
         int numeroBitsParidad = 0;
