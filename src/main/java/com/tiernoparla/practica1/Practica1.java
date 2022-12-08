@@ -19,14 +19,22 @@ public class Practica1 {
         // sender
         byte[] codigoHamming = calcularCodigoHamming(mensaje);
 
-        // hacemos 0, 1 o 2 modificaciones random
+        // noise
+        byte[] mensajeRecibido = generarCambiosAleatorios(codigoHamming);
+
+        // reciever
+        concluirSiHayErrores(mensajeRecibido, recalcularMensaje(mensajeRecibido));
+
+    } // main
+
+    public static byte[] generarCambiosAleatorios(byte[] codigoHamming) {
+
         final byte CERO = 0;
         final byte UNO = 1;
         final byte DOS = 2;
 
         Random rnd = new Random();
-        byte[] mensajeRecibido = codigoHamming;
-
+        byte[] mensajeRecibido = codigoHamming.clone();
         final byte NUMERO_CAMBIOS = (byte) rnd.nextInt(3);
 
         switch (NUMERO_CAMBIOS) {
@@ -41,32 +49,10 @@ public class Practica1 {
                 mensajeRecibido = hacerDosCambios(codigoHamming, mensajeRecibido);
                 break;
         }
+        return mensajeRecibido;
+    }
 
-        /*
-         * // hacemos cambios a mano para ver que el reciever los detecta bien
-         * final int POSICION_MODIFICADA_1 = 8;
-         * final int POSICION_MODIFICADA_2 = 8;
-         * 
-         * final byte[] ceroModificaciones = codigoHamming.clone();
-         * 
-         * final byte[] unaModificacion = codigoHamming.clone();
-         * unaModificacion[POSICION_MODIFICADA_1] = (byte) (1 -
-         * unaModificacion[POSICION_MODIFICADA_1]);
-         * 
-         * final byte[] dosModificaciones = codigoHamming.clone();
-         * dosModificaciones[POSICION_MODIFICADA_1] = (byte) (1 -
-         * dosModificaciones[POSICION_MODIFICADA_1]);
-         * dosModificaciones[POSICION_MODIFICADA_2] = (byte) (1 -
-         * dosModificaciones[POSICION_MODIFICADA_2]);
-         * 
-         * final byte[] mensajeRecibido = dosModificaciones;
-         */
-
-        // concluirSiHayErrores(mensajeRecibido, recalcularMensaje(mensajeRecibido));
-
-    } // main
-
-    private static byte[] hacerDosCambios(byte[] codigoHamming, byte[] mensajeRecibido) {
+    public static byte[] hacerDosCambios(byte[] codigoHamming, byte[] mensajeRecibido) {
         while (Arrays.equals(codigoHamming, mensajeRecibido)) {
             mensajeRecibido = hacerUnCambio(mensajeRecibido);
             mensajeRecibido = hacerUnCambio(mensajeRecibido);
@@ -74,14 +60,15 @@ public class Practica1 {
         return mensajeRecibido;
     }
 
-    private static byte[] hacerUnCambio(byte[] mensajeRecibido) {
+    public static byte[] hacerUnCambio(byte[] mensajeRecibido) {
         Random rnd = new Random();
         final int POSICION_CAMBIO = rnd.nextInt(mensajeRecibido.length);
         mensajeRecibido[POSICION_CAMBIO] = (byte) (1 - mensajeRecibido[POSICION_CAMBIO]);
+        System.out.println("pos cambio: " + POSICION_CAMBIO);
         return mensajeRecibido;
     }
 
-    private static byte[] recalcularMensaje(final byte[] mensajeRecibido) {
+    public static byte[] recalcularMensaje(final byte[] mensajeRecibido) {
         // hacemos el reciever
         final byte[] mensajeDeberiaSer = mensajeRecibido.clone();
         // recalculamos bits de paridad
@@ -92,7 +79,7 @@ public class Practica1 {
         return mensajeDeberiaSer;
     }
 
-    private static void concluirSiHayErrores(final byte[] mensajeRecibido, final byte[] mensajeDeberiaSer) {
+    public static void concluirSiHayErrores(final byte[] mensajeRecibido, final byte[] mensajeDeberiaSer) {
         // detectamos si hay algún error
         boolean hayError = !Arrays.equals(mensajeDeberiaSer, mensajeRecibido);
 
@@ -110,7 +97,7 @@ public class Practica1 {
         }
     }
 
-    private static int detectarError(final byte[] mensajeRecibido) {
+    public static int detectarError(final byte[] mensajeRecibido) {
         // detectar el error
         int posicionError = 0;
         for (int i = 0; i < mensajeRecibido.length; i++) {
@@ -121,7 +108,7 @@ public class Practica1 {
         return posicionError;
     }
 
-    private static byte[] calcularCodigoHamming(final byte[] mensaje) {
+    public static byte[] calcularCodigoHamming(final byte[] mensaje) {
 
         byte[] codigoHamming = new byte[calculcarNumeroBitsParidad(mensaje) + mensaje.length + 1];
 
@@ -137,7 +124,7 @@ public class Practica1 {
         return codigoHamming;
     }
 
-    private static byte calcularBitParidad(byte[] codigoHamming, int posicion) {
+    public static byte calcularBitParidad(byte[] codigoHamming, int posicion) {
         int counter = 0;
         for (int i = codigoHamming.length - 1; i > posicion; i--) {
             if ((posicion & i) == posicion) {
