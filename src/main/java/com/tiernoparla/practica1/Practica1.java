@@ -14,9 +14,20 @@ public class Practica1 {
         // sender
         byte[] codigoHamming = calcularCodigoHamming(mensaje);
 
-        System.out.println(Arrays.toString(codigoHamming));
-        System.out.println(Arrays.toString(codigoHamming_test));
-        System.out.println(Arrays.equals(codigoHamming, codigoHamming_test));
+        // hacemos cambios a mano para ver que el reciever los detecta bien
+        final int POSICION_MODIFICADA_1 = 5;
+        final int POSICION_MODIFICADA_2 = 6;
+
+        final byte[] ceroModificaciones = codigoHamming.clone();
+        
+        final byte[] unaModificacion = codigoHamming.clone();
+        unaModificacion[POSICION_MODIFICADA_1] = (byte)(1 - unaModificacion[POSICION_MODIFICADA_1]);
+
+        final byte[] dosModificaciones = codigoHamming.clone();
+        dosModificaciones[POSICION_MODIFICADA_1] = (byte)(1 - dosModificaciones[POSICION_MODIFICADA_1]);
+        dosModificaciones[POSICION_MODIFICADA_2] = (byte)(1 - dosModificaciones[POSICION_MODIFICADA_2]);
+
+
 
     } // main
 
