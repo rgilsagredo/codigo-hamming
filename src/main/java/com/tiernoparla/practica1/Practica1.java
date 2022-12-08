@@ -3,6 +3,7 @@ package com.tiernoparla.practica1;
 import static java.lang.Math.*;
 
 import java.util.Arrays;
+import java.util.Random;
 
 public class Practica1 {
     /**
@@ -18,22 +19,50 @@ public class Practica1 {
         // sender
         byte[] codigoHamming = calcularCodigoHamming(mensaje);
 
-        // hacemos cambios a mano para ver que el reciever los detecta bien
-        final int POSICION_MODIFICADA_1 = 8;
-        final int POSICION_MODIFICADA_2 = 8;
+        // hacemos 0, 1 o 2 modificaciones random
+        final byte CERO = 0;
+        final byte UNO = 1;
+        final byte DOS = 2;
 
-        final byte[] ceroModificaciones = codigoHamming.clone();
+        Random rnd = new Random();
+        final byte[] mensajeRecibido;
 
-        final byte[] unaModificacion = codigoHamming.clone();
-        unaModificacion[POSICION_MODIFICADA_1] = (byte) (1 - unaModificacion[POSICION_MODIFICADA_1]);
+        switch ((byte) rnd.nextInt(3)) {
+            case CERO:
+                mensajeRecibido = codigoHamming;
+                break;
+            case UNO:
+                // hacer 1 cambio
+                break;
+            case DOS:
+                // hacer 2 cambios
+        }
 
-        final byte[] dosModificaciones = codigoHamming.clone();
-        dosModificaciones[POSICION_MODIFICADA_1] = (byte) (1 - dosModificaciones[POSICION_MODIFICADA_1]);
-        dosModificaciones[POSICION_MODIFICADA_2] = (byte) (1 - dosModificaciones[POSICION_MODIFICADA_2]);
+        for (int i = 0; i < 20; i++) {
+            System.out.println(rnd.nextInt(3));
+        }
 
-        final byte[] mensajeRecibido = dosModificaciones;
+        /*
+         * // hacemos cambios a mano para ver que el reciever los detecta bien
+         * final int POSICION_MODIFICADA_1 = 8;
+         * final int POSICION_MODIFICADA_2 = 8;
+         * 
+         * final byte[] ceroModificaciones = codigoHamming.clone();
+         * 
+         * final byte[] unaModificacion = codigoHamming.clone();
+         * unaModificacion[POSICION_MODIFICADA_1] = (byte) (1 -
+         * unaModificacion[POSICION_MODIFICADA_1]);
+         * 
+         * final byte[] dosModificaciones = codigoHamming.clone();
+         * dosModificaciones[POSICION_MODIFICADA_1] = (byte) (1 -
+         * dosModificaciones[POSICION_MODIFICADA_1]);
+         * dosModificaciones[POSICION_MODIFICADA_2] = (byte) (1 -
+         * dosModificaciones[POSICION_MODIFICADA_2]);
+         * 
+         * final byte[] mensajeRecibido = dosModificaciones;
+         */
 
-        concluirSiHayErrores(mensajeRecibido, recalcularMensaje(mensajeRecibido));
+        // concluirSiHayErrores(mensajeRecibido, recalcularMensaje(mensajeRecibido));
 
     } // main
 
