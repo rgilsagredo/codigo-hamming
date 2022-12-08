@@ -27,17 +27,21 @@ public class Practica1 {
         dosModificaciones[POSICION_MODIFICADA_1] = (byte)(1 - dosModificaciones[POSICION_MODIFICADA_1]);
         dosModificaciones[POSICION_MODIFICADA_2] = (byte)(1 - dosModificaciones[POSICION_MODIFICADA_2]);
 
+        final byte[] mensajeRecibido = ceroModificaciones;
+
         // hacemos el reciever
-        final byte[] mensajeDeberiaSer = dosModificaciones.clone();
+        final byte[] mensajeDeberiaSer = mensajeRecibido.clone();
         // recalculamos bits de paridad
         mensajeDeberiaSer[0] = calcularBitParidad(mensajeDeberiaSer,0);
         for(int i = 0; pow(2,i) < mensajeDeberiaSer.length; i++){
             mensajeDeberiaSer[(int)pow(2,i)] = calcularBitParidad(mensajeDeberiaSer, (int)pow(2,i));
         }
 
-        System.out.println(Arrays.toString(mensajeDeberiaSer));
-        System.out.println(Arrays.toString(ceroModificaciones));
-        System.out.println(Arrays.equals(ceroModificaciones, mensajeDeberiaSer));
+        // detectamos si hay algún error
+        boolean hayError = Arrays.equals(mensajeDeberiaSer, mensajeRecibido);
+        
+
+
 
 
 
