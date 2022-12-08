@@ -25,21 +25,21 @@ public class Practica1 {
         final byte DOS = 2;
 
         Random rnd = new Random();
-        final byte[] mensajeRecibido;
+        byte[] mensajeRecibido = codigoHamming;
 
-        switch ((byte) rnd.nextInt(3)) {
+        final byte NUMERO_CAMBIOS = (byte) rnd.nextInt(3);
+
+        switch (NUMERO_CAMBIOS) {
             case CERO:
-                mensajeRecibido = codigoHamming;
                 break;
             case UNO:
                 // hacer 1 cambio
+                mensajeRecibido = hacerUnCambio(mensajeRecibido);
                 break;
             case DOS:
                 // hacer 2 cambios
-        }
-
-        for (int i = 0; i < 20; i++) {
-            System.out.println(rnd.nextInt(3));
+                mensajeRecibido = hacerDosCambios(codigoHamming, mensajeRecibido);
+                break;
         }
 
         /*
@@ -65,6 +65,21 @@ public class Practica1 {
         // concluirSiHayErrores(mensajeRecibido, recalcularMensaje(mensajeRecibido));
 
     } // main
+
+    private static byte[] hacerDosCambios(byte[] codigoHamming, byte[] mensajeRecibido) {
+        while (Arrays.equals(codigoHamming, mensajeRecibido)) {
+            mensajeRecibido = hacerUnCambio(mensajeRecibido);
+            mensajeRecibido = hacerUnCambio(mensajeRecibido);
+        }
+        return mensajeRecibido;
+    }
+
+    private static byte[] hacerUnCambio(byte[] mensajeRecibido) {
+        Random rnd = new Random();
+        final int POSICION_CAMBIO = rnd.nextInt(mensajeRecibido.length);
+        mensajeRecibido[POSICION_CAMBIO] = (byte) (1 - mensajeRecibido[POSICION_CAMBIO]);
+        return mensajeRecibido;
+    }
 
     private static byte[] recalcularMensaje(final byte[] mensajeRecibido) {
         // hacemos el reciever
