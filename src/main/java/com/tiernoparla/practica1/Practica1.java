@@ -27,6 +27,18 @@ public class Practica1 {
         dosModificaciones[POSICION_MODIFICADA_1] = (byte)(1 - dosModificaciones[POSICION_MODIFICADA_1]);
         dosModificaciones[POSICION_MODIFICADA_2] = (byte)(1 - dosModificaciones[POSICION_MODIFICADA_2]);
 
+        // hacemos el reciever
+        final byte[] mensajeDeberiaSer = dosModificaciones.clone();
+        // recalculamos bits de paridad
+        mensajeDeberiaSer[0] = calcularBitParidad(mensajeDeberiaSer,0);
+        for(int i = 0; pow(2,i) < mensajeDeberiaSer.length; i++){
+            mensajeDeberiaSer[(int)pow(2,i)] = calcularBitParidad(mensajeDeberiaSer, (int)pow(2,i));
+        }
+
+        System.out.println(Arrays.toString(mensajeDeberiaSer));
+        System.out.println(Arrays.toString(ceroModificaciones));
+        System.out.println(Arrays.equals(ceroModificaciones, mensajeDeberiaSer));
+
 
 
     } // main
@@ -38,7 +50,7 @@ public class Practica1 {
         int indiceMensaje = mensaje.length - 1;
         for (int i = codigoHamming.length - 1; i >= 0; i--) {
             if (esPotenciaDe2(i) || i == 0) {
-                codigoHamming[i] = (byte) calcularBitParidad(codigoHamming, i);
+                codigoHamming[i] = calcularBitParidad(codigoHamming, i);
             } else {
                 codigoHamming[i] = mensaje[indiceMensaje];
                 indiceMensaje--;
@@ -47,14 +59,14 @@ public class Practica1 {
         return codigoHamming;
     }
 
-    private static int calcularBitParidad(byte[] codigoHamming, int posicion) {
+    private static byte calcularBitParidad(byte[] codigoHamming, int posicion) {
         int counter = 0;
         for (int i = codigoHamming.length - 1; i > posicion; i--) {
             if ((posicion & i) == posicion) {
                 counter += codigoHamming[i];
             }
         }
-        return (counter % 2);
+        return (byte)(counter % 2);
     }
 
     public static int calculcarNumeroBitsParidad(final byte[] mensaje) {
