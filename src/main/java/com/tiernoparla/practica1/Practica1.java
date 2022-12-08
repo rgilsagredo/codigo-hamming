@@ -18,7 +18,10 @@ public class Practica1
         // crear array (vacío) con codigo de hamming
         byte[] codigoHamming = new byte[numeroBitsParidad + mensaje.length + 1];
 
-        System.out.println(codigoHamming.length);
+        // rellenamos las posiciones del array que no contienen bits de paridad
+
+
+
 
     } // main
 
@@ -29,5 +32,9 @@ public class Practica1
         }
         return numeroBitsParidad;
     } // caclulcarNumeroBitsParidad
+
+    public static boolean esPotenciaDe2(int numero){
+        return (numero & (numero-1)) == 0;
+    }
 
 } // Practica1
