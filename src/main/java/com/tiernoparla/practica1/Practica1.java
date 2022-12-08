@@ -11,11 +11,12 @@ public class Practica1 {
      */
 
     public static void main(String[] args) {
+        
+        final int TAMANO = 2;
+        final byte[] mensaje = crearMensaje(TAMANO);
 
-        // creo un caso conocido para desarrollar sobre él
-        final byte[] mensaje = { 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0 };
-        final byte[] codigoHamming_test = { 0, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0 };
 
+        /* 
         // sender
         byte[] codigoHamming = calcularCodigoHamming(mensaje);
 
@@ -24,8 +25,19 @@ public class Practica1 {
 
         // reciever
         concluirSiHayErrores(mensajeRecibido, recalcularMensaje(mensajeRecibido));
+        */
 
     } // main
+
+    private static byte[] crearMensaje(final int TAMANO) {
+        final int DOS = 2;
+        Random rnd = new Random();
+        final byte[] mensaje = new byte[TAMANO];
+        for(int i = 0; i < TAMANO; i++){
+            mensaje[i] = (byte) rnd.nextInt(DOS);
+        }
+        return mensaje;
+    }
 
     public static byte[] generarCambiosAleatorios(byte[] codigoHamming) {
 
