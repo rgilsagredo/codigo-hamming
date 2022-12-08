@@ -9,13 +9,16 @@ public class Practica1
         
         // creo un caso conocido para desarrollar sobre él
         final byte[] mensaje = {0,1,0,0,1,1,0,1,0,1,0};
-        final byte[] codigoHamming = {0,0,0,0,1,1,0,0,0,1,1,0,1,0,1,0};
+        final byte[] codigoHamming_test = {0,0,0,0,1,1,0,0,0,1,1,0,1,0,1,0};
 
         // sender
         // calcular num bit paridad
         int numeroBitsParidad = calculcarNumeroBitsParidad(mensaje);
 
-        System.out.println(numeroBitsParidad);
+        // crear array (vacío) con codigo de hamming
+        byte[] codigoHamming = new byte[numeroBitsParidad + mensaje.length + 1];
+
+        System.out.println(codigoHamming.length);
 
     } // main
 
