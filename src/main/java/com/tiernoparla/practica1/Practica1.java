@@ -27,6 +27,23 @@ public class Practica1 {
             }
         }
 
+        // calculamos los bits de paridad
+        for (int i = codigoHamming.length - 1; i >= 0; i--) {
+            if (esPotenciaDe2(i) || i == 0) {
+                int counter = 0;
+                for (int j = codigoHamming.length - 1; j > i; j--) {
+                    if ((i & j) == i) {
+                        counter += codigoHamming[j];
+                    }
+                }
+                codigoHamming[i] = (byte) (counter % 2);
+            }
+        }
+
+        System.out.println(Arrays.toString(codigoHamming));
+        System.out.println(Arrays.toString(codigoHamming_test));
+        System.out.println(Arrays.equals(codigoHamming,codigoHamming_test));
+
     } // main
 
     public static int calculcarNumeroBitsParidad(final byte[] mensaje) {
